@@ -63,7 +63,7 @@ class RowinfoCSV(Resource):
                 myRow[prop] = val
                 rowarray_list.append(myRow)
 
-        #result = json.dumps(rowarray_list)
+        result = rowarray_list
 
         #result = json.loads(cursor.fetchall)        
         cursor.close()
