@@ -46,9 +46,34 @@ class Rowinfo(Resource):
         #result = json.loads(cursor.fetchall)        
         cursor.close()
         return result, 200
+
+class RowinfoCSV(Resource):
+    def get(self):     
+        # customer = {"CustomerID": customer_id}
+        cursor = conn.cursor()    
+        cursor.execute("SELECT BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
+
+        rows = [x for x in cursor]
+        cols = [x[0] for x in cursor.description]
+        rowarray_list = []
+
+        for row in rows:
+            myRow = {}
+            for prop, val in zip(cols, row):
+                myRow[prop] = val
+                rowarray_list.append(myRow)
+
+        #result = json.dumps(rowarray_list)
+
+        #result = json.loads(cursor.fetchall)        
+        cursor.close()
+        return result, 200
     
 # Create API route to defined Customer class
 api.add_resource(Rowinfo, '/rowinfo')
+
+api.add_resource(RowinfoCSV, '/rowinfocsv')
+
 
 # Start App
 if __name__ == '__main__':
