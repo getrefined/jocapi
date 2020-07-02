@@ -1,9 +1,10 @@
 import sys
 import os
-from flask import Flask
+from flask import Flask, send_file
 from flask_restful import reqparse, Api, Resource
 import simplejson as json
 import pyodbc
+import csv
 
 # This is a simplified example that only support GET request.
 # It is meant to help you to get you started if you're new to development
@@ -53,21 +54,31 @@ class RowinfoCSV(Resource):
         cursor = conn.cursor()    
         cursor.execute("SELECT BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
 
-        rows = [x for x in cursor]
-        cols = [x[0] for x in cursor.description]
-        rowarray_list = []
+        csv_file_path = 'trac.csv'
+
+        rows = cursor.fetchall()
+
+        result = list()
+
+        column_names = list()
+        for i in cursor.description:
+            column_names.append(i[0])
+
+        result.append(column_names)
 
         for row in rows:
-            myRow = {}
-            for prop, val in zip(cols, row):
-                myRow[prop] = val
-                rowarray_list.append(myRow)
+            result.append(row)
 
-        result = rowarray_list
-
-        #result = json.loads(cursor.fetchall)        
+        with open(csv_file_path, 'w', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for row in result:
+                csvwriter.writerow(row)
+       
         cursor.close()
-        return result, 200
+
+        return send_file("trac.csv", mimetype='text/css',as_attachment=True)
+        #return redirect("/my_csv_file.csv", code=302)
+        #return result, 200
     
 # Create API route to defined Customer class
 api.add_resource(Rowinfo, '/rowinfo')
