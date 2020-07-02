@@ -20,7 +20,6 @@ app = Flask(__name__)
 # Setup Flask Restful framework
 api = Api(app)
 parser = reqparse.RequestParser()
-# parser.add_argument('customer')
 
 # Create connection to Azure SQL
 conn = pyodbc.connect(os.environ['SQLAZURECONNSTR_WWIF'])
