@@ -28,7 +28,7 @@ conn = pyodbc.connect(os.environ['SQLAZURECONNSTR_WWIF'])
 # Customer Class
 class Rowinfo(Resource):
     def get(self):     
-        # customer = {"CustomerID": customer_id}
+
         cursor = conn.cursor()    
         cursor.execute("SELECT BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
 
@@ -43,14 +43,13 @@ class Rowinfo(Resource):
                 rowarray_list.append(myRow)
 
         result = json.dumps(rowarray_list)
-
-        #result = json.loads(cursor.fetchall)        
+       
         cursor.close()
         return result, 200
 
 class RowinfoCSV(Resource):
     def get(self):     
-        # customer = {"CustomerID": customer_id}
+
         cursor = conn.cursor()    
         cursor.execute("SELECT BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
 
@@ -76,11 +75,10 @@ class RowinfoCSV(Resource):
        
         cursor.close()
 
-        return send_file("trac.csv", mimetype='text/css',as_attachment=True)
-        #return redirect("/my_csv_file.csv", code=302)
-        #return result, 200
+        return send_file("trac.csv", mimetype='text/css', as_attachment=True)
+
     
-# Create API route to defined Customer class
+# Create API route for JSON & CSV
 api.add_resource(Rowinfo, '/rowinfo')
 
 api.add_resource(RowinfoCSV, '/rowinfocsv')
