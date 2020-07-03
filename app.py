@@ -50,7 +50,7 @@ class RowinfoCSV(Resource):
     def get(self):     
 
         cursor = conn.cursor()    
-        cursor.execute("SELECT 2.0149100 as Latitude 49.1779458 as Longitude, BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
+        cursor.execute("SELECT 2.0149100 as Latitude, 49.1779458 as Longitude, BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
 
         csv_file_path = 'trac.csv'
 
