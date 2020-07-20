@@ -44,6 +44,7 @@ class Rowinfo(Resource):
         result = json.dumps(rowarray_list)
        
         cursor.close()
+        conn.close()
         return result, 200
 
 class RowinfoCSV(Resource):
@@ -73,6 +74,7 @@ class RowinfoCSV(Resource):
                 csvwriter.writerow(row)
        
         cursor.close()
+        conn.close()
 
         return send_file("trac.csv", mimetype='text/css', as_attachment=True)
 
