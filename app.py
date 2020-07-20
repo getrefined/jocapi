@@ -21,12 +21,14 @@ app = Flask(__name__)
 api = Api(app)
 parser = reqparse.RequestParser()
 
-# Create connection to Azure SQL
-conn = pyodbc.connect(os.environ['SQLAZURECONNSTR_WWIF'])
+
 
 # Customer Class
 class Rowinfo(Resource):
     def get(self):     
+
+        # Create connection to Azure SQL
+        conn = pyodbc.connect(os.environ['SQLAZURECONNSTR_WWIF'])
 
         cursor = conn.cursor()    
         cursor.execute("SELECT BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
@@ -50,6 +52,9 @@ class Rowinfo(Resource):
 class RowinfoCSV(Resource):
     def get(self):     
 
+        # Create connection to Azure SQL
+        conn = pyodbc.connect(os.environ['SQLAZURECONNSTR_WWIF'])
+        
         cursor = conn.cursor()    
         cursor.execute("SELECT 2.0149100 as Latitude, 49.1779458 as Longitude, BatchNumber, Location, Area, RowNumber, MRNote, BMNote, Name, GrillSize, Quantity, WeightPerBag, TotalWeight, Ploidy, CONVERT(CHAR(8), MovementDate, 112) AS MovementDate, Type, BagColor, MeshSize, SupplierName, NoPerBag, KgPerBag, RowID FROM BatchSummaryLive")
 
